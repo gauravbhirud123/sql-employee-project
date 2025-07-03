@@ -417,3 +417,45 @@ select * from (select * ,
 row_number() over (order by employee_id) as employee_rank,
 count(*) over () as total_employees
 from employees) temp where employee_rank > total_employees-2 or employee_rank in (1,2);
+
+-- Query to find the cumulative sum of employee's salary
+select * ,
+sum(salary) over(order by employee_id) as cumulative_sum
+from employees;
+
+-- Query to find the cumulative sum of empoyee's salary departmentwise
+select * ,
+sum(salary) over(partition by department_id order by employee_id) as cumulative_sum
+from employees;
+
+-- Write a query to fetch 50% records from the employee table
+select * from (select * ,
+row_number() over(order by employee_id) as employee_rank
+from employees) as temp where employee_rank <= (
+    select count(employee_id) / 2 from employees
+); 
+
+-- Window Function(Aggregate)
+select employee_id,salary,
+sum(salary) over(order by employee_id) AS "Total",
+avg(salary) over(order by employee_id) AS "Average",
+count(salary) over(order by employee_id) AS "Count",
+min(salary) over(order by employee_id) AS "Min",
+max(salary) over(order by employee_id) AS "Max"
+from employees;
+
+-- Window Function(Ranking)
+select employee_id,first_name,salary,
+row_number() over (order by employee_id) AS "row_number",
+rank() over (order by employee_id) AS "rank",
+dense_rank() over (order by employee_id) "dense_rank",
+percent_rank() over (order by employee_id) "percent_rank"
+from employees;
+
+-- window function
+select employee_id,first_name,salary,
+first_value(salary) over(order by salary) as "first_value",
+last_value(salary) over(order by salary) as "last_value",
+lead(salary) over(order by salary) as "lead",
+lag(salary) over(order by salary) as "lag"
+from employees;
