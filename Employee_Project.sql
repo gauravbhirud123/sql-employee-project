@@ -423,7 +423,7 @@ select * ,
 sum(salary) over(order by employee_id) as cumulative_sum
 from employees;
 
--- Query to find the cumulative sum of empoyee's salary departmentwise
+-- Query to find the cumulative sum of employee's salary departmentwise
 select * ,
 sum(salary) over(partition by department_id order by employee_id) as cumulative_sum
 from employees;
